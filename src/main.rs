@@ -80,10 +80,15 @@ fn add_todo() {
 fn list_todos() {
     let vector = get_vector();
     let mut count = 0;
-    for v in vector {
-        count += 1;
-        println!("{}. {}", count, v)
-    }
+    if vector.len() == 0 {
+        println!("all clear!")
+    } else {
+        for v in vector {
+            count += 1;
+            println!("{}. {}", count, v)
+        };
+    };
+    println!("");
 }
 
 fn delete_todo() {
@@ -99,5 +104,23 @@ fn delete_todo() {
         .read_line(&mut del)
         .expect("huuuh");
 
-    vector.remove(del.trim().parse().expect("not an integer"));
+    // !!! this suucks pls rework
+    let index = &del.trim().parse().expect("not an integer") - (1 as i32);
+    vector.remove(index.try_into().unwrap());
+
+    let mut f = 
+    File::options()
+        .write(true)
+        .truncate(true)
+        .open(PATH)
+        .expect("cannot open file for writing");
+
+    f.set_len(0)
+        .expect("could not erase file contents");
+
+    for v in vector {
+        f.write_all((v + "\n").as_bytes()).expect("could not save todos");
+    }
+
+    println!("successfully removed \"{}\" from the list\n", del.replace("\n", ""));
 }
