@@ -1,10 +1,7 @@
 use std::fs::{File, read_to_string};
-// use std::env::args;
 use std::io::{stdin, stdout, Write};
 
 static PATH: &str = "todos";
-
-//? saasd
 
 fn main() {
     println!("todo app omg\n");
@@ -83,6 +80,7 @@ fn list_todos() {
     if vector.len() == 0 {
         println!("all clear!")
     } else {
+        println!("todo list:");
         for v in vector {
             count += 1;
             println!("{}. {}", count, v)
@@ -93,6 +91,14 @@ fn list_todos() {
 
 fn delete_todo() {
     let mut vector = get_vector();
+
+    let mut count = 0;
+    println!("todo list:");
+    for v in vector.clone() {
+        count += 1;
+        println!("{}. {}", count, v)
+    };
+
     println!("enter number of a todo to remove");
 
     let mut del = String::new();
@@ -105,8 +111,12 @@ fn delete_todo() {
         .expect("huuuh");
 
     // !!! this suucks pls rework
-    let index = &del.trim().parse().expect("not an integer") - (1 as i32);
-    vector.remove(index.try_into().unwrap());
+    let index: usize = del.trim().parse().expect("couldn't convert");
+    if index - 1 >= vector.len() {
+        println!("no element with the index you provided\n");
+        return;
+    };
+    vector.remove(index - 1);
 
     let mut f = 
     File::options()
