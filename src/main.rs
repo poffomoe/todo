@@ -17,16 +17,17 @@ fn main() {
         ));
 
         print!("> ");
-        stdout().flush().unwrap();
+        stdout()
+            .flush()
+            .unwrap();
         let mut answer: String = String::new();
         stdin().read_line(&mut answer)
             .expect("stupid");
 
-        println!("\n");
         match answer.replace("\n", "").as_ref() {
             "1" | "a" => add_todo(),
             "2" | "l" => list_todos(),
-            "3" | "d" => todo!(),
+            "3" | "d" => delete_todo(),
             "4" | "q" => break,
             &_ => println!("{}", answer)
         }
@@ -46,9 +47,12 @@ fn add_todo() {
     println!("what do you want to add?");
 
     print!("> ");
-    stdout().flush().unwrap();
+    stdout()
+        .flush()
+        .unwrap();
     let mut newtodo: String = String::new();
-    stdin().read_line(&mut newtodo)
+    stdin()
+        .read_line(&mut newtodo)
         .expect("how tf did you manage to break this");
 
     let mut vector: Vec<String> = get_vector();
@@ -57,10 +61,10 @@ fn add_todo() {
 
     let mut f = 
     File::options()
-    .write(true)
-    .truncate(true)
-    .open(PATH)
-    .expect("cannot open file for writing");
+        .write(true)
+        .truncate(true)
+        .open(PATH)
+        .expect("cannot open file for writing");
 
     f.set_len(0)
         .expect("could not erase file contents");
@@ -74,9 +78,26 @@ fn add_todo() {
 }
 
 fn list_todos() {
-    let mut vector: Vec<String> = get_vector();
-    for v in 0..=vector.iter().count() {
-        println!("{}. {}", v)
+    let vector = get_vector();
+    let mut count = 0;
+    for v in vector {
+        count += 1;
+        println!("{}. {}", count, v)
     }
 }
 
+fn delete_todo() {
+    let mut vector = get_vector();
+    println!("enter number of a todo to remove");
+
+    let mut del = String::new();
+    print!("> ");
+    stdout()
+        .flush()
+        .unwrap();
+    stdin()
+        .read_line(&mut del)
+        .expect("huuuh");
+
+    vector.remove(del.trim().parse().expect("not an integer"));
+}
