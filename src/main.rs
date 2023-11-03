@@ -28,7 +28,6 @@ fn main() {
             "4" | "q" => break,
             &_ => println!("{}", answer)
         }
-
     }
 }
 
@@ -71,7 +70,6 @@ fn add_todo() {
     }
 
     println!("successfully added \"{}\" to the todo list\n", newtodo.replace("\n", ""));
-
 }
 
 fn list_todos() {
