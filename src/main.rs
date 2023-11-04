@@ -104,23 +104,31 @@ fn delete_todo() {
 
     println!("enter number of a todo to remove");
 
-    let mut del = String::new();
-    print!("> ");
-    stdout()
-        .flush()
-        .unwrap();
-    stdin()
-        .read_line(&mut del)
-        .expect("huuuh");
+    loop {
+        let mut del = String::new();
+        print!("> ");
+        stdout()
+            .flush()
+            .unwrap();
+        stdin()
+            .read_line(&mut del)
+            .expect("huuuh");
+        match del
+            .trim()
+            .parse::<usize>() {
+                Ok(index) => {
+                    if index - 1 >= vector.len() {
+                        println!("no element with the index you provided\n");
+                    };
+                
+                    vector.remove(index - 1);
+                    write_file(vector, format!("successfully removed \"{}\" from the list\n", del.replace("\n", "")));
 
-    // !!! this suucks pls rework
-    let index: usize = del.trim().parse().expect("your input is not an integer");
-    if index - 1 >= vector.len() {
-        println!("no element with the index you provided\n");
-        return;
+                    break;
+                },
+                Err(_) => {
+                    println!("your input is not an unsigned integer");
+                }
+            };
     };
-    
-    vector.remove(index - 1);
-
-    write_file(vector, format!("successfully removed \"{}\" from the list\n", del.replace("\n", "")));
 }
