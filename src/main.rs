@@ -57,7 +57,7 @@ fn write_file(contents: Vec<String>, message: String) -> () {
 }
 
 fn add_todo() {
-    println!("what do you want to add?");
+    println!("\nwhat do you want to add?");
 
     print!("ADD: ");
     stdout()
@@ -80,13 +80,11 @@ fn add_todo() {
 fn list_todos() {
     let vector = get_vector();
 
-    println!("\n");
-
     let mut count = 0;
     if vector.len() == 0 {
-        println!("all clear!")
+        println!("\nall clear!")
     } else {
-        println!("todo list:");
+        println!("\ntodo list:");
         for v in vector {
             count += 1;
             println!("{}. {}", count, v)
