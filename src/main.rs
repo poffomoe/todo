@@ -4,7 +4,8 @@ use std::io::{stdin, stdout, Write};
 static PATH: &str = "todos";
 
 fn main() {
-    println!("todo app omg\n");
+    println!("TODO APP OMG\n");
+
     loop {
         println!(concat!("what you wanna do?\n",
             "1. (a) add a todo\n",
@@ -14,7 +15,7 @@ fn main() {
         ));
 
         let mut answer: String = String::new();
-        
+
         print!("> ");
         stdout()
             .flush()
