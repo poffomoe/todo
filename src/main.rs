@@ -13,11 +13,12 @@ fn main() {
             "4. (q) nothing!! i wanna quit!!!!"
         ));
 
+        let mut answer: String = String::new();
+        
         print!("> ");
         stdout()
             .flush()
             .unwrap();
-        let mut answer: String = String::new();
         stdin().read_line(&mut answer)
             .expect("stupid");
 
@@ -59,11 +60,12 @@ fn write_file(contents: Vec<String>, message: String) -> () {
 fn add_todo() {
     println!("\nwhat do you want to add?");
 
+    let mut newtodo: String = String::new();
+
     print!("ADD: ");
     stdout()
         .flush()
         .unwrap();
-    let mut newtodo: String = String::new();
     stdin()
         .read_line(&mut newtodo)
         .expect("how tf did you manage to break this");
@@ -107,6 +109,7 @@ fn delete_todo() {
 
     loop {
         let mut del = String::new();
+
         print!("DEL: ");
         stdout()
             .flush()
@@ -114,6 +117,7 @@ fn delete_todo() {
         stdin()
             .read_line(&mut del)
             .expect("huuuh");
+
         match del
             .trim()
             .parse::<usize>() {
