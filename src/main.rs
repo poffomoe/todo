@@ -69,7 +69,7 @@ fn add_todo() {
         .unwrap();
     stdin()
         .read_line(&mut newtodo)
-        .expect("how tf did you manage to break this");
+        .expect("how did you manage to break this");
 
     let mut vector: Vec<String> = get_vector();
 
