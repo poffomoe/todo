@@ -39,6 +39,23 @@ fn get_vector() -> Vec<String> {
         .collect()
 }
 
+fn write_file(contents: Vec<String>, message: String) -> () {
+    let mut f = File::options()
+        .write(true)
+        .truncate(true)
+        .open(PATH)
+        .expect("cannot open file for writing");
+
+    f.set_len(0)
+        .expect("could not erase file contents");
+
+    for v in contents {
+        f.write_all((v + "\n").as_bytes()).expect("could not save todos");
+    }
+    
+    println!("{}", message);
+}
+
 fn add_todo() {
     println!("what do you want to add?");
 
@@ -55,19 +72,7 @@ fn add_todo() {
 
     vector.push(newtodo.replace("\n", ""));
 
-    let mut f = 
-    File::options()
-        .write(true)
-        .truncate(true)
-        .open(PATH)
-        .expect("cannot open file for writing");
-
-    f.set_len(0)
-        .expect("could not erase file contents");
-
-    for v in vector {
-        f.write_all((v + "\n").as_bytes()).expect("could not save todos");
-    }
+    write_file(vector, String::from("a"));
 
     println!("successfully added \"{}\" to the todo list\n", newtodo.replace("\n", ""));
 }
@@ -109,26 +114,13 @@ fn delete_todo() {
         .expect("huuuh");
 
     // !!! this suucks pls rework
-    let index: usize = del.trim().parse().expect("couldn't convert");
+    let index: usize = del.trim().parse().expect("your input is not an integer");
     if index - 1 >= vector.len() {
         println!("no element with the index you provided\n");
         return;
     };
+    
     vector.remove(index - 1);
 
-    let mut f = 
-    File::options()
-        .write(true)
-        .truncate(true)
-        .open(PATH)
-        .expect("cannot open file for writing");
-
-    f.set_len(0)
-        .expect("could not erase file contents");
-
-    for v in vector {
-        f.write_all((v + "\n").as_bytes()).expect("could not save todos");
-    }
-
-    println!("successfully removed \"{}\" from the list\n", del.replace("\n", ""));
+    write_file(vector, format!("successfully removed \"{}\" from the list\n", del.replace("\n", "")));
 }
