@@ -4,7 +4,7 @@ use std::io::{stdin, stdout, Write};
 static PATH: &str = "todos";
 
 fn main() {
-    println!("TODO APP OMG\n");
+    println!("== TODO APP OMG ==\n");
 
     loop {
         println!(concat!("what you wanna do?\n",
