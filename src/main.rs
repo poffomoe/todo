@@ -59,7 +59,7 @@ fn write_file(contents: Vec<String>, message: String) -> () {
 fn add_todo() {
     println!("what do you want to add?");
 
-    print!("> ");
+    print!("ADD: ");
     stdout()
         .flush()
         .unwrap();
@@ -79,6 +79,9 @@ fn add_todo() {
 
 fn list_todos() {
     let vector = get_vector();
+
+    println!("\n");
+
     let mut count = 0;
     if vector.len() == 0 {
         println!("all clear!")
@@ -96,17 +99,17 @@ fn delete_todo() {
     let mut vector = get_vector();
 
     let mut count = 0;
-    println!("todo list:");
+    println!("\ntodo list:");
     for v in vector.clone() {
         count += 1;
         println!("{}. {}", count, v)
     };
 
-    println!("enter number of a todo to remove");
+    println!("\nenter number of a todo to remove");
 
     loop {
         let mut del = String::new();
-        print!("> ");
+        print!("DEL: ");
         stdout()
             .flush()
             .unwrap();
@@ -119,6 +122,7 @@ fn delete_todo() {
                 Ok(index) => {
                     if index - 1 >= vector.len() {
                         println!("no element with the index you provided\n");
+                        continue;
                     };
                 
                     vector.remove(index - 1);
