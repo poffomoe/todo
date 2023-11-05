@@ -1,35 +1,23 @@
 use std::fs::{File, read_to_string};
-use std::io::{stdin, stdout, Write};
+use std::io::Write;
+use std::env::args;
 
 static PATH: &str = "todos";
 
 fn main() {
-    println!("== TODO APP OMG ==\n");
+    println!("");
 
-    loop {
-        println!(concat!("what you wanna do?\n",
-            "1. (a) add a todo\n",
-            "2. (l) list todos\n",
-            "3. (d) delete a todo\n",
-            "4. (q) nothing!! i wanna quit!!!!"
-        ));
-
-        let mut answer: String = String::new();
-
-        print!("> ");
-        stdout()
-            .flush()
-            .unwrap();
-        stdin().read_line(&mut answer)
-            .expect("stupid");
-
-        match answer.replace("\n", "").as_ref() {
-            "1" | "a" => add_todo(),
-            "2" | "l" => list_todos(),
-            "3" | "d" => delete_todo(),
-            "4" | "q" => break,
-            &_ => println!("{}", answer)
-        }
+    let args: Vec<String> = args().collect();
+    if args.len() == 1 {
+        println!("no arguments provided. use todo-cli-app help for help");
+        return;
+    }
+    match args[1].as_str() {
+        "a" | "add" => if args.len() > 2 {add_todo(args[2].clone())} else {println!("nothing to add. please write your task after \"a\"/\"add\"")},
+        "l" | "list" => list_todos(),
+        "d" | "delete" => if args.len() > 2 {delete_todo(args[2].clone())} else {println!("nothing to remove. please write task number after \"d\"/\"delete\"")},
+        "h" | "help" => get_help(),
+        _ => println!("unknown argument provided. use todo-cli-app help for help")
     }
 }
 
@@ -58,26 +46,12 @@ fn write_file(contents: Vec<String>, message: String) -> () {
     println!("{}", message);
 }
 
-fn add_todo() {
-    println!("\nwhat do you want to add?");
-
-    let mut newtodo: String = String::new();
-
-    print!("ADD: ");
-    stdout()
-        .flush()
-        .unwrap();
-    stdin()
-        .read_line(&mut newtodo)
-        .expect("how did you manage to break this");
-
+fn add_todo(task: String) {
     let mut vector: Vec<String> = get_vector();
 
-    vector.push(newtodo.replace("\n", ""));
+    vector.push(task.clone());
 
-    write_file(vector, String::from("a"));
-
-    println!("successfully added \"{}\" to the todo list\n", newtodo.replace("\n", ""));
+    write_file(vector, format!("successfully added \"{}\" to the todo list", task));
 }
 
 fn list_todos() {
@@ -85,57 +59,47 @@ fn list_todos() {
 
     let mut count = 0;
     if vector.len() == 0 {
-        println!("\nall clear!")
+        println!("all clear!")
     } else {
-        println!("\ntodo list:");
+        println!("todo list:");
         for v in vector {
             count += 1;
             println!("{}. {}", count, v)
         };
     };
-    println!("");
 }
 
-fn delete_todo() {
+fn delete_todo(index: String) {
     let mut vector = get_vector();
 
-    let mut count = 0;
-    println!("\ntodo list:");
-    for v in vector.clone() {
-        count += 1;
-        println!("{}. {}", count, v)
-    };
-
-    println!("\nenter number of a todo to remove");
-
-    loop {
-        let mut del = String::new();
-
-        print!("DEL: ");
-        stdout()
-            .flush()
-            .unwrap();
-        stdin()
-            .read_line(&mut del)
-            .expect("huuuh");
-
-        match del
+    match index
             .trim()
             .parse::<usize>() {
-                Ok(index) => {
-                    if index - 1 >= vector.len() {
-                        println!("no element with the index you provided\n");
-                        continue;
+                Ok(number) => {
+                    if number - 1 >= vector.len() {
+                        println!("no element with the index you provided");
+                        return;
                     };
-                
-                    vector.remove(index - 1);
-                    write_file(vector, format!("successfully removed \"{}\" from the list\n", del.replace("\n", "")));
+                    
+                    let tasktext: String = vector[number - 1].clone();
+                    vector.remove(number - 1);
+                    write_file(vector, format!("successfully removed \"{}\" from the list", tasktext));
 
-                    break;
                 },
                 Err(_) => {
                     println!("your input is not an unsigned integer");
                 }
             };
-    };
+}
+
+fn get_help() {
+    println!(concat!(
+        "todo app help message:\n",
+        "a (add) \"[text]\" - add a task to the list. text has to be in quotes
+        other arguments after text will be ignored\n",
+        "l (list) - list tasks\n",
+        "d (delete) [task number] - remove a task from the list
+        other arguments after task number will be ignored\n",
+        "h (help) - show this message"
+    ))
 }
