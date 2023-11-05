@@ -7,13 +7,13 @@ This is an app that I made just to practise writing Rust. It does not invent any
 ## Synopsis
 
 Add a task to the list:  
-```todo a/add "this is a task"```  
+```todo-cli-app a/add "this is a task"```  
 
 List tasks:  
-```todo l/list```
+```todo-cli-app l/list```
 
 Remove a task from the list:  
-```todo d/delete 1```
+```todo-cli-app d/delete 1```
 
 ## Features
 
