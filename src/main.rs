@@ -22,6 +22,13 @@ fn main() {
 }
 
 fn get_vector() -> Vec<String> {
+    File::options()
+        .read(true)
+        .write(true)
+        .create(true)
+        .open(PATH)
+        .expect("couldn't create file");
+    
     read_to_string(PATH) 
         .unwrap()
         .lines()
