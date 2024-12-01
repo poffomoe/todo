@@ -29,6 +29,3 @@ Remove a task from the list:
 - [ ] Formal language (? not sure)
 - [x] Optimisation?.. I don't know what else to put
 
-## pytodo?
-
-Read the README.md in [./pytodo/](./pytodo/) for more information.
